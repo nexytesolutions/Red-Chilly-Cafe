@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Montserrat:wght@400;500;600;700&family=Dancing+Script:wght@600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-script: "Dancing Script", cursive;
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+
+  --color-espresso: #2A170D;
+  --color-espresso-light: #402316;
+  --color-espresso-dark: #1E1109;
+  --color-cream: #F5E7CF;
+  --color-cream-light: #F8EBD5;
+  --color-cream-dark: #EFE0C6;
+  --color-terracotta: #C94D2F;
+  --color-terracotta-light: #D65A38;
+  --color-terracotta-dark: #B9472C;
+  --color-ink: #302019;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif-display {
+  font-family: var(--font-serif);
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+::selection {
+  background-color: var(--color-terracotta);
+  color: var(--color-cream-light);
+}
+
+/* subtle paper texture */
+.paper-texture {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(0,0,0,0.015) 0%, transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(0,0,0,0.02) 0%, transparent 45%);
+}
+
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
