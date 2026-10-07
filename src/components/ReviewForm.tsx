@@ -4,7 +4,7 @@ import { RatingStarsInput } from './RatingStars';
 import { useData } from '../context/DataContext';
 
 const ReviewForm: React.FC = () => {
-  const { addReview } = useData();
+  const { addReview, reviewError } = useData();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [rating, setRating] = useState(0);
@@ -12,22 +12,24 @@ const ReviewForm: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !rating || !text) {
       setError('Please fill in every field and choose a rating.');
       return;
     }
     setError('');
-    addReview({
+    const saved = await addReview({
       id: `${Date.now()}`,
       name,
+      email,
       avatar: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=200&auto=format&fit=crop',
       rating,
       text,
       status: 'Pending',
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
     });
+    if (!saved) return;
     setSubmitted(true);
     setName('');
     setEmail('');
@@ -84,7 +86,7 @@ const ReviewForm: React.FC = () => {
         />
       </label>
 
-      {error && <p className="text-terracotta-dark text-sm font-sans">{error}</p>}
+      {(error || reviewError) && <p role="alert" className="text-terracotta-dark text-sm font-sans">{error || reviewError}</p>}
       {submitted && (
         <p className="text-green-700 text-sm font-sans">
           Thank you! Your review has been submitted and is awaiting approval.

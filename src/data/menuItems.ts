@@ -1,9 +1,10 @@
-export type DietType = 'veg' | 'non-veg';
+import type { Category } from './categories';
+import type { DietType } from './dietTypes';
 
 export interface MenuItem {
   id: string;
   name: string;
-  category: string;
+  category: Category;
   dietType: DietType;
   description: string;
   image: string;
@@ -11,95 +12,3 @@ export interface MenuItem {
   largePrice: number;
 }
 
-export const categories = [
-  'Pizza',
-  'Pasta',
-  'Chicken',
-  'Seafood',
-  'Soup',
-  'Dessert',
-  'Drinks',
-] as const;
-
-export const menuItems: MenuItem[] = [
-  {
-    id: 'margherita',
-    name: 'Margherita',
-    category: 'Pizza',
-    dietType: 'veg',
-    description: 'Fresh tomato sauce, mozzarella, basil and a drizzle of olive oil.',
-    image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=400&auto=format&fit=crop',
-    regularPrice: 300,
-    largePrice: 350,
-  },
-  {
-    id: 'gorgonzola',
-    name: 'Gorgonzola',
-    category: 'Pizza',
-    dietType: 'veg',
-    description: 'Creamy gorgonzola, mozzarella, walnuts and a hint of honey.',
-    image: 'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?q=80&w=400&auto=format&fit=crop',
-    regularPrice: 400,
-    largePrice: 500,
-  },
-  {
-    id: 'classic',
-    name: 'Classic',
-    category: 'Pizza',
-    dietType: 'non-veg',
-    description: 'Tomato sauce, mozzarella, chicken, peppers and olives.',
-    image: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?q=80&w=400&auto=format&fit=crop',
-    regularPrice: 400,
-    largePrice: 500,
-  },
-  {
-    id: 'quattro-formaggi',
-    name: 'Quattro Formaggi',
-    category: 'Pizza',
-    dietType: 'veg',
-    description: 'Mozzarella, gorgonzola, parmesan and taleggio.',
-    image: 'https://images.unsplash.com/photo-1548369937-47519962c11a?q=80&w=400&auto=format&fit=crop',
-    regularPrice: 450,
-    largePrice: 550,
-  },
-  {
-    id: 'pepperoni',
-    name: 'Pepperoni',
-    category: 'Pizza',
-    dietType: 'non-veg',
-    description: 'Spicy pepperoni, mozzarella and herbs.',
-    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=400&auto=format&fit=crop',
-    regularPrice: 420,
-    largePrice: 520,
-  },
-  {
-    id: 'bbq-chicken',
-    name: 'BBQ Chicken',
-    category: 'Pizza',
-    dietType: 'non-veg',
-    description: 'Grilled chicken, BBQ sauce, onions, mozzarella and herbs.',
-    image: 'https://images.unsplash.com/photo-1600028068383-ea11a7a101f3?q=80&w=400&auto=format&fit=crop',
-    regularPrice: 440,
-    largePrice: 540,
-  },
-  {
-    id: 'seafood-pizza',
-    name: 'Seafood Pizza',
-    category: 'Pizza',
-    dietType: 'non-veg',
-    description: 'Prawns, calamari, fresh herbs and mozzarella.',
-    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400&auto=format&fit=crop',
-    regularPrice: 520,
-    largePrice: 620,
-  },
-  {
-    id: 'tandoori-chicken-pizza',
-    name: 'Tandoori Chicken Pizza',
-    category: 'Pizza',
-    dietType: 'non-veg',
-    description: 'Tandoori chicken, capsicum, onion, cheese and a hint of mint.',
-    image: 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?q=80&w=400&auto=format&fit=crop',
-    regularPrice: 480,
-    largePrice: 580,
-  },
-];

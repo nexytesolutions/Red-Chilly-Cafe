@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { Review } from '../data/reviews';
 
 interface Props {
-  onSave: (review: Review) => void;
+  onSave: (review: Review & { email: string }) => void | Promise<void>;
   onCancel: () => void;
 }
 
@@ -11,6 +11,7 @@ const inputClass =
 
 const AdminReviewForm: React.FC<Props> = ({ onSave, onCancel }) => {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [rating, setRating] = useState('5');
   const [text, setText] = useState('');
 
@@ -19,6 +20,7 @@ const AdminReviewForm: React.FC<Props> = ({ onSave, onCancel }) => {
     onSave({
       id: `review-${Date.now()}`,
       name: name.trim(),
+      email: email.trim(),
       avatar: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=200&auto=format&fit=crop',
       rating: Number(rating),
       text: text.trim(),
@@ -43,6 +45,20 @@ const AdminReviewForm: React.FC<Props> = ({ onSave, onCancel }) => {
           className={inputClass}
           value={name}
           onChange={(event) => setName(event.target.value)}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="reviewer-email" className="font-sans text-xs text-ink/60 mb-1 block">
+          Reviewer Email
+        </label>
+        <input
+          id="reviewer-email"
+          required
+          type="email"
+          className={inputClass}
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
       </div>
 

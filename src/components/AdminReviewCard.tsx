@@ -20,7 +20,13 @@ const AdminReviewCard: React.FC<Props> = ({ review, onApprove, onHide, onDelete 
   <div className="border border-ink/10 rounded-xl p-4 bg-cream-light/40 flex flex-col">
     <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-2">
-        <img src={review.avatar} alt={review.name} className="h-9 w-9 rounded-full object-cover" />
+        <span
+          role="img"
+          aria-label={`${review.name}'s profile`}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-terracotta/30 bg-terracotta/10 font-serif-display text-xs font-semibold text-terracotta"
+        >
+          {review.name.trim().charAt(0).toUpperCase() || '?'}
+        </span>
         <p className="font-sans font-semibold text-sm text-ink">{review.name}</p>
       </div>
       <span className={`text-[10px] font-sans font-medium px-2 py-0.5 rounded-full ${statusStyles[review.status]}`}>

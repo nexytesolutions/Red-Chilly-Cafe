@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
-import { categories, type MenuItem, type DietType } from '../data/menuItems';
+import { type MenuItem } from '../data/menuItems';
+import { useData } from '../context/DataContext';
 
 interface Props {
   initial?: MenuItem;
   onSave: (item: MenuItem) => void;
   onCancel: () => void;
 }
-
 const emptyItem: Omit<MenuItem, 'id'> = {
   name: '',
-  category: 'Pizza',
-  dietType: 'veg',
+  category: {
+    id: '',
+    name: '',
+  },
+  dietType: {
+    id: '',
+    name: '',
+  },
   description: '',
   image: '',
   regularPrice: 0,
   largePrice: 0,
 };
 
+
+
 const MenuItemForm: React.FC<Props> = ({ initial, onSave, onCancel }) => {
+    const { dietTypes, categories } = useData();
   const [form, setForm] = useState<Omit<MenuItem, 'id'>>(initial ?? emptyItem);
   const [error, setError] = useState('');
 
@@ -59,28 +68,59 @@ const MenuItemForm: React.FC<Props> = ({ initial, onSave, onCancel }) => {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="font-sans text-xs text-ink/60 mb-1 block">Category</label>
-          <select
-            className={inputClass}
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-          >
-            {categories.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+         <select
+  className={inputClass}
+  value={form.category.id}
+  onChange={(e) => {
+    const selected = categories.find(
+      (category) => category.id === e.target.value
+    );
+
+    if (selected) {
+      setForm({
+        ...form,
+        category: selected,
+      });
+    }
+  }}
+>
+  <option value="">Select category</option>
+
+  {categories.map((category) => (
+    <option key={category.id} value={category.id}>
+      {category.name}
+    </option>
+  ))}
+</select>
+
         </div>
         <div>
           <label className="font-sans text-xs text-ink/60 mb-1 block">Diet Type</label>
-          <select
-            className={inputClass}
-            value={form.dietType}
-            onChange={(e) => setForm({ ...form, dietType: e.target.value as DietType })}
-          >
-            <option value="veg">Veg</option>
-            <option value="non-veg">Non-Veg</option>
-          </select>
+         <select
+  className={inputClass}
+  value={form.dietType.id}
+  onChange={(e) => {
+    const selected = dietTypes.find(
+      (dietType) => dietType.id === e.target.value
+    );
+
+    if (selected) {
+      setForm({
+        ...form,
+        dietType: selected,
+      });
+    }
+  }}
+>
+  <option value="">Select diet type</option>
+
+  {dietTypes.map((dietType) => (
+    <option key={dietType.id} value={dietType.id}>
+      {dietType.name}
+    </option>
+  ))}
+</select>
+
         </div>
       </div>
 

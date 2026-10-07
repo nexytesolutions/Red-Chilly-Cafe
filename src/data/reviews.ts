@@ -3,6 +3,7 @@ export type ReviewStatus = 'Approved' | 'Pending' | 'Hidden';
 export interface Review {
   id: string;
   name: string;
+  email?: string;
   avatar: string;
   rating: number;
   text: string;

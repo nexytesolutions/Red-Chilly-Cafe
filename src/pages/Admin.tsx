@@ -8,14 +8,14 @@ import MenuItemForm from '../components/MenuItemForm';
 import AdminReviewForm from '../components/AdminReviewForm';
 import LeafDecoration from '../components/LeafDecoration';
 import ChiliDecoration from '../components/ChiliDecoration';
-import { categories, type MenuItem } from '../data/menuItems';
+import { type MenuItem } from '../data/menuItems';
 import { useData } from '../context/DataContext';
 import type { Review, ReviewStatus } from '../data/reviews';
 
 type ReviewFilter = 'All Reviews' | 'Pending Reviews' | 'Approved Reviews' | 'Hidden Reviews';
 
 const Admin: React.FC = () => {
-  const { menu, addMenuItem, updateMenuItem, deleteMenuItem, reviewList, addReview, setReviewStatus, deleteReview } =
+  const { menu, menuError, categories, addMenuItem, updateMenuItem, deleteMenuItem, reviewList, reviewError, addReview, setReviewStatus, deleteReview } =
     useData();
 
   const [tab, setTab] = useState('menu');
@@ -26,15 +26,16 @@ const Admin: React.FC = () => {
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('All Reviews');
 
-  const filteredMenu = useMemo(
-    () =>
-      menu.filter(
-        (item) =>
-          (category === 'All' || item.category === category) &&
-          item.name.toLowerCase().includes(search.toLowerCase())
-      ),
-    [menu, category, search]
-  );
+const filteredMenu = useMemo(
+  () =>
+    menu.filter(
+      (item) =>
+        (category === 'All' || item.category.id === category) &&
+        item.name.toLowerCase().includes(search.toLowerCase())
+    ),
+  [menu, category, search]
+);
+
 
   const left = filteredMenu.filter((_, i) => i % 2 === 0);
   const right = filteredMenu.filter((_, i) => i % 2 === 1);
@@ -52,15 +53,26 @@ const Admin: React.FC = () => {
     setEditing(item);
     setModalOpen(true);
   };
-  const handleSave = (item: MenuItem) => {
-    if (editing) updateMenuItem(item);
-    else addMenuItem(item);
-    setModalOpen(false);
+  const handleSave = async (item: MenuItem) => {
+    const saved = editing ? await updateMenuItem(item) : await addMenuItem(item);
+    if (saved) setModalOpen(false);
   };
 
-  const handleReviewSave = (review: Review) => {
-    addReview(review);
-    setReviewModalOpen(false);
+  const handleReviewSave = async (review: Review & { email: string }) => {
+    const saved = await addReview(review);
+    if (saved) setReviewModalOpen(false);
+  };
+
+  const confirmDeleteMenuItem = (item: MenuItem) => {
+    if (window.confirm(`Delete "${item.name}"? This cannot be undone.`)) {
+      void deleteMenuItem(item.id);
+    }
+  };
+
+  const confirmDeleteReview = (review: Review) => {
+    if (window.confirm(`Delete the review from "${review.name}"? This cannot be undone.`)) {
+      void deleteReview(review.id);
+    }
   };
 
   return (
@@ -102,6 +114,12 @@ const Admin: React.FC = () => {
             </div>
           </div>
 
+          {menuError && (
+            <p role="alert" className="mb-4 rounded-md border border-red-800/20 bg-red-800/5 px-3 py-2 font-sans text-sm text-red-800">
+              {menuError}
+            </p>
+          )}
+
           <div className="mb-6 overflow-x-auto">
             <div className="flex min-w-max gap-2">
               <button
@@ -114,26 +132,31 @@ const Admin: React.FC = () => {
               >
                 All
               </button>
-              {categories.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setCategory(c)}
-                  className={`shrink-0 px-4 py-2 rounded-lg text-sm font-sans transition-colors focus-ring ${
-                    category === c
-                      ? 'bg-terracotta text-cream-light'
-                      : 'border border-ink/15 text-ink/70 hover:border-terracotta/50'
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
+              {categories.map((cat) => (
+  <button
+    key={cat.id}
+    onClick={() => setCategory(cat.id)}
+    className={`shrink-0 px-4 py-2 rounded-lg text-sm font-sans transition-colors focus-ring ${
+      category === cat.id
+        ? 'bg-terracotta text-cream-light'
+        : 'border border-ink/15 text-ink/70 hover:border-terracotta/50'
+    }`}
+  >
+    {cat.name}
+  </button>
+))}
+
             </div>
           </div>
 
           {filteredMenu.length === 0 ? (
-            <p className="font-sans text-sm text-ink/50 py-10 text-center">
-              No {category.toLowerCase()} items found.
-            </p>
+           <p className="font-sans text-sm text-ink/50 py-10 text-center">
+  No {category === 'All'
+    ? ''
+    : categories.find((c) => c.id === category)?.name ?? ''
+  } items found.
+</p>
+
           ) : (
             <div className="max-h-[28rem] overflow-y-auto pr-1 md:max-h-none md:overflow-visible md:pr-0">
               <div className="grid grid-cols-1 gap-x-10 md:grid-cols-2">
@@ -143,7 +166,7 @@ const Admin: React.FC = () => {
                       key={item.id}
                       item={item}
                       onEdit={() => openEdit(item)}
-                      onDelete={() => deleteMenuItem(item.id)}
+                      onDelete={() => confirmDeleteMenuItem(item)}
                     />
                   ))}
                 </div>
@@ -153,7 +176,7 @@ const Admin: React.FC = () => {
                       key={item.id}
                       item={item}
                       onEdit={() => openEdit(item)}
-                      onDelete={() => deleteMenuItem(item.id)}
+                      onDelete={() => confirmDeleteMenuItem(item)}
                     />
                   ))}
                 </div>
@@ -204,6 +227,12 @@ const Admin: React.FC = () => {
             </div>
           </div>
 
+          {reviewError && (
+            <p role="alert" className="mb-4 rounded-md border border-red-800/20 bg-red-800/5 px-3 py-2 font-sans text-sm text-red-800">
+              {reviewError}
+            </p>
+          )}
+
           {filteredReviews.length === 0 ? (
             <p className="font-sans text-sm text-ink/50 py-10 text-center">No reviews match this filter.</p>
           ) : (
@@ -214,7 +243,7 @@ const Admin: React.FC = () => {
                   review={review}
                   onApprove={() => setReviewStatus(review.id, 'Approved')}
                   onHide={() => setReviewStatus(review.id, 'Hidden')}
-                  onDelete={() => deleteReview(review.id)}
+                  onDelete={() => confirmDeleteReview(review)}
                 />
               ))}
             </div>

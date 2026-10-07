@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Leaf, Flame } from 'lucide-react';
 import MenuCategoryTabs from '../components/MenuCategoryTabs';
 import MenuFilters, { type DietFilter } from '../components/MenuFilters';
@@ -9,15 +9,25 @@ import WaveDivider from '../components/WaveDivider';
 import { useData } from '../context/DataContext';
 
 const Menu: React.FC = () => {
-  const { menu } = useData();
-  const [category, setCategory] = useState('Pizza');
+  const { menu, categories } = useData();
+  const [category, setCategory] = useState('');
   const [diet, setDiet] = useState<DietFilter>('all');
+
+  useEffect(() => {
+    if (categories.length > 0 && !categories.some((item) => item.id === category)) {
+      const defaultCategory = categories.find((item) => item.name.toLowerCase() === 'pizza') ?? categories[0];
+      setCategory(defaultCategory.id);
+    }
+  }, [categories, category]);
+
+  const selectedCategory = categories.find((item) => item.id === category);
 
   const filtered = useMemo(
     () =>
       menu.filter(
         (item) =>
-          item.category === category && (diet === 'all' ? true : item.dietType === diet)
+          item.category.id === category &&
+          (diet === 'all' || item.dietType.name.toLowerCase() === diet)
       ),
     [menu, category, diet]
   );
@@ -57,14 +67,14 @@ const Menu: React.FC = () => {
 
         <div className="flex items-center gap-3 mb-6">
           <h2 className="font-serif-display font-bold text-2xl text-ink flex items-center gap-2">
-            {category.toUpperCase()} <Flame size={16} className="text-terracotta" />
+            {selectedCategory?.name.toUpperCase()} <Flame size={16} className="text-terracotta" />
           </h2>
           <span className="h-px flex-1 max-w-[80px] bg-terracotta/60" />
         </div>
 
         {filtered.length === 0 ? (
           <p className="font-sans text-ink/60 py-16 text-center">
-            More {category.toLowerCase()} dishes are coming soon to the menu.
+            More {selectedCategory?.name.toLowerCase() ?? 'menu'} dishes are coming soon to the menu.
           </p>
         ) : (
           <div className="max-h-[30rem] overflow-y-auto pr-1 md:max-h-none md:overflow-visible md:pr-0">

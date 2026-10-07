@@ -21,13 +21,13 @@ const MenuItemRow: React.FC<Props> = ({ item }) => (
         </h4>
         <span
           className={`inline-flex w-fit shrink-0 items-center gap-1 self-start rounded-full border px-1.5 py-0.5 text-[9px] font-sans font-medium sm:text-[10px] ${
-            item.dietType === 'veg'
+            item.dietType.name.toLowerCase() === 'veg'
               ? 'border-green-700/40 text-green-700'
               : 'border-terracotta/40 text-terracotta'
           }`}
         >
-          {item.dietType === 'veg' ? <Leaf size={9} /> : <Flame size={9} />}
-          {item.dietType === 'veg' ? 'Veg' : 'Non-Veg'}
+          {item.dietType.name.toLowerCase() === 'veg' ? <Leaf size={9} /> : <Flame size={9} />}
+          {item.dietType.name}
         </span>
       </div>
       <p className="mt-1 line-clamp-2 font-sans text-[11px] leading-snug text-ink/60 sm:text-sm">

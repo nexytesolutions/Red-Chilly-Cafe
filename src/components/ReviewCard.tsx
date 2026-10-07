@@ -9,11 +9,13 @@ interface Props {
 const ReviewCard: React.FC<Props> = ({ review }) => (
   <div className="border border-ink/10 rounded-xl p-5 bg-cream-light/40">
     <div className="flex items-center gap-3 mb-2">
-      <img
-        src={review.avatar}
-        alt={review.name}
-        className="h-10 w-10 rounded-full object-cover"
-      />
+      <span
+        role="img"
+        aria-label={`${review.name}'s profile`}
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-terracotta/30 bg-terracotta/10 font-serif-display text-sm font-semibold text-terracotta"
+      >
+        {review.name.trim().charAt(0).toUpperCase() || '?'}
+      </span>
       <div>
         <p className="font-sans font-semibold text-ink text-sm">{review.name}</p>
         <RatingStarsDisplay rating={review.rating} />
