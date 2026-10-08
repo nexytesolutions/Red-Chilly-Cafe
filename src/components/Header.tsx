@@ -17,7 +17,7 @@ const Header: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="relative z-30 bg-espresso border-b border-white/5">
+    <header className="relative z-30 bg-espresso border-b border-white/5" style={{ position: 'sticky', top: 0 }}>
       <div className="mx-auto flex max-w-[1536px] items-center justify-between px-6 py-3 md:px-10">
         <a href="#home" className="shrink-0" onClick={() => setOpen(false)}>
           <Logo className="h-16 w-16 md:h-20 md:w-20" />
