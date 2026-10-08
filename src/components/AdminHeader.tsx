@@ -12,9 +12,10 @@ const tabs = [
 interface Props {
   activeTab: string;
   onTabChange: (id: string) => void;
+  onLogout: () => void;
 }
 
-const AdminHeader: React.FC<Props> = ({ activeTab, onTabChange }) => (
+const AdminHeader: React.FC<Props> = ({ activeTab, onTabChange, onLogout }) => (
   <header className="bg-espresso relative">
     <div className="flex items-center justify-between px-6 md:px-10 py-3">
       <div className="flex items-center gap-4">
@@ -33,12 +34,13 @@ const AdminHeader: React.FC<Props> = ({ activeTab, onTabChange }) => (
           <Eye size={14} /> View Website
         </Link>
         <span className="h-6 w-px bg-white/15" />
-        <Link
-          to="/"
+        <button
+          type="button"
+          onClick={onLogout}
           className="flex items-center gap-2 text-cream-light/80 text-xs tracking-wide px-2 py-2 hover:text-terracotta-light transition-colors focus-ring"
         >
           <LogOut size={14} /> Logout
-        </Link>
+        </button>
       </div>
 
       <ChiliDecoration className="hidden lg:block absolute right-4 top-2 h-10 w-20 opacity-60" />

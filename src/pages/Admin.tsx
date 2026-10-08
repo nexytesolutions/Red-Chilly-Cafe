@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Leaf } from 'lucide-react';
 import AdminHeader from '../components/AdminHeader';
 import AdminMenuItemRow from '../components/AdminMenuItemRow';
@@ -11,10 +12,12 @@ import ChiliDecoration from '../components/ChiliDecoration';
 import { type MenuItem } from '../data/menuItems';
 import { useData } from '../context/DataContext';
 import type { Review, ReviewStatus } from '../data/reviews';
+import { logoutDemoAdmin } from '../auth/demoAdminAuth';
 
 type ReviewFilter = 'All Reviews' | 'Pending Reviews' | 'Approved Reviews' | 'Hidden Reviews';
 
 const Admin: React.FC = () => {
+  const navigate = useNavigate();
   const { menu, menuError, categories, addMenuItem, updateMenuItem, deleteMenuItem, reviewList, reviewError, addReview, setReviewStatus, deleteReview } =
     useData();
 
@@ -25,6 +28,11 @@ const Admin: React.FC = () => {
   const [editing, setEditing] = useState<MenuItem | undefined>(undefined);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('All Reviews');
+
+  const handleLogout = () => {
+    logoutDemoAdmin();
+    navigate('/admin/login', { replace: true });
+  };
 
 const filteredMenu = useMemo(
   () =>
@@ -77,7 +85,7 @@ const filteredMenu = useMemo(
 
   return (
     <div className="min-h-screen bg-cream">
-      <AdminHeader activeTab={tab} onTabChange={setTab} />
+      <AdminHeader activeTab={tab} onTabChange={setTab} onLogout={handleLogout} />
 
       <div className="max-w-[1536px] mx-auto px-6 md:px-10 py-8">
         {tab === 'menu' && (
