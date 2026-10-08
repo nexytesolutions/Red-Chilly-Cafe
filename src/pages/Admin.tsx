@@ -12,7 +12,7 @@ import ChiliDecoration from '../components/ChiliDecoration';
 import { type MenuItem } from '../data/menuItems';
 import { useData } from '../context/DataContext';
 import type { Review, ReviewStatus } from '../data/reviews';
-import { logoutDemoAdmin } from '../auth/demoAdminAuth';
+import { adminAuthService } from '../auth/demoAdminAuth';
 
 type ReviewFilter = 'All Reviews' | 'Pending Reviews' | 'Approved Reviews' | 'Hidden Reviews';
 
@@ -30,7 +30,7 @@ const Admin: React.FC = () => {
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('All Reviews');
 
   const handleLogout = () => {
-    logoutDemoAdmin();
+    adminAuthService.logout();
     navigate('/admin/login', { replace: true });
   };
 

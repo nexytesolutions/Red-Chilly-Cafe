@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Leaf, LockKeyhole } from 'lucide-react';
+import { Eye, EyeOff, Leaf, LoaderCircle, LockKeyhole } from 'lucide-react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import ChiliDecoration from '../components/ChiliDecoration';
 import Logo from '../components/Logo';
-import { isDemoAdminAuthenticated, loginDemoAdmin } from '../auth/demoAdminAuth';
+import { adminAuthService } from '../auth/demoAdminAuth';
 
 const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
@@ -11,21 +11,36 @@ const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (isDemoAdminAuthenticated()) {
+  if (adminAuthService.isAuthenticated()) {
     return <Navigate to="/admin" replace />;
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isSubmitting) return;
+
     setError('');
+    setIsSubmitting(true);
 
-    if (loginDemoAdmin(username, password)) {
+    try {
+      const result = await adminAuthService.authenticate(username, password);
+      if (!result.success) {
+        setError(result.message || 'Unable to sign in. Please try again.');
+        return;
+      }
+
       navigate('/admin', { replace: true });
-      return;
+    } catch (authError) {
+      setError(
+        authError instanceof Error && authError.message
+          ? authError.message
+          : 'Unable to connect to the authentication service. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setError('The email or password you entered is incorrect.');
   };
 
   return (
@@ -67,16 +82,16 @@ const AdminLogin: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="admin-username" className="mb-2 block font-sans text-xs font-semibold tracking-wide text-ink/80">
-                Admin email
+                Username
               </label>
               <input
                 id="admin-username"
-                type="email"
+                type="text"
                 autoComplete="username"
                 required
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
-                placeholder="name@redchillycafe.com"
+                placeholder="Enter admin username"
                 className="w-full rounded-md border border-ink/15 bg-cream-light px-4 py-3 font-sans text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus:border-terracotta"
               />
             </div>
@@ -93,7 +108,7 @@ const AdminLogin: React.FC = () => {
                   required
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  placeholder="Enter your password"
+                  placeholder="Enter password"
                   className="w-full bg-transparent px-4 py-3 font-sans text-sm text-ink placeholder:text-ink/35 outline-none"
                 />
                 <button
@@ -116,10 +131,11 @@ const AdminLogin: React.FC = () => {
 
             <button
               type="submit"
-              disabled={!username.trim() || !password}
-              className="w-full rounded-md bg-terracotta px-5 py-3.5 font-sans text-xs font-semibold tracking-[0.12em] text-cream-light transition-colors hover:bg-terracotta-dark focus-ring disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={!username.trim() || !password || isSubmitting}
+              className="flex w-full items-center justify-center gap-2 rounded-md bg-terracotta px-5 py-3.5 font-sans text-xs font-semibold tracking-[0.12em] text-cream-light transition-colors hover:bg-terracotta-dark focus-ring disabled:cursor-not-allowed disabled:opacity-50"
             >
-              SIGN IN TO ADMIN
+              {isSubmitting && <LoaderCircle size={15} className="animate-spin" />}
+              {isSubmitting ? 'Logging in...' : 'Login'}
             </button>
           </form>
         </div>

@@ -4,7 +4,7 @@ import PublicLayout from './components/PublicLayout';
 import LandingPage from './pages/LandingPage';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
-import { isDemoAdminAuthenticated } from './auth/demoAdminAuth';
+import { adminAuthService } from './auth/demoAdminAuth';
 import { DataProvider } from './context/DataContext';
 
 const App: React.FC = () => (
@@ -16,7 +16,7 @@ const App: React.FC = () => (
         </Route>
         <Route
           path="/admin"
-          element={isDemoAdminAuthenticated() ? <Admin /> : <Navigate to="/admin/login" replace />}
+          element={adminAuthService.isAuthenticated() ? <Admin /> : <Navigate to="/admin/login" replace />}
         />
         <Route path="/admin/login" element={<AdminLogin />} />
       </Routes>
