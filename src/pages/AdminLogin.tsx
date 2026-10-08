@@ -3,7 +3,7 @@ import { Eye, EyeOff, Leaf, LoaderCircle, LockKeyhole } from 'lucide-react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import ChiliDecoration from '../components/ChiliDecoration';
 import Logo from '../components/Logo';
-import { adminAuthService } from '../auth/demoAdminAuth';
+import { adminAuthService } from '../auth/adminAuth';
 
 const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
@@ -13,9 +13,7 @@ const AdminLogin: React.FC = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (adminAuthService.isAuthenticated()) {
-    return <Navigate to="/admin" replace />;
-  }
+  if (adminAuthService.isAuthenticated()) return <Navigate to="/admin" replace />;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

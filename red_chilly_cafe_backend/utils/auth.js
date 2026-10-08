@@ -19,6 +19,13 @@ async function authenticate(request, reply) {
           path: "/",
           maxAge: 60 * 60 * 24, // 24 hours in seconds
           signed: true,
+        }).setCookie("active", true, {
+          httpOnly: false,
+          secure: true,
+          sameSite: "None",
+          path: "/",
+          maxAge: 60 * 60 * 24, // 24 hours in seconds
+          signed: false,
         });
     return;
   } catch (err) {

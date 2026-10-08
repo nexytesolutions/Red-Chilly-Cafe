@@ -12,23 +12,7 @@ function get_all_reviews(req, reply) {
 }
 
 function create_review(req, reply) {
-    const { review } = req.body || {};
-    if (!review || typeof review.name !== "string" || typeof review.email !== "string" ||
-        typeof review.description !== "string" || !Number.isInteger(review.rating)) {
-        return reply.code(400).send({ error: "Invalid review" });
-    }
-
-    const name = review.name.trim();
-    const email = review.email.trim().toLowerCase();
-    const description = review.description.trim();
-    if (!name || name.length > 50 || !email || email.length < 6 || email.length > 50 ||
-        !/^\S+@\S+\.\S+$/.test(email) || !description || description.length > 200 ||
-        review.rating < 1 || review.rating > 5) {
-        return reply.code(400).send({ error: "Invalid review" });
-    }
-    if (review_model.get_review_by_email(email)) {
-        return reply.code(409).send({ error: "A review already exists with this email" });
-    }
+    const { review } = req.body;
 
     try {
         const pending = status_model.get_status_by_name("Pending");
@@ -39,10 +23,10 @@ function create_review(req, reply) {
         }
         review_model.create_review({
             review_id,
-            name,
-            email,
+            name: review.name,
+            email: review.email,
             status_id: pending.status_id,
-            description,
+            description: review.description,
             rating: review.rating
         });
         return reply.code(201).send({ message: "Review Created Successfully", review_id });
@@ -56,15 +40,8 @@ function create_review(req, reply) {
 }
 
 function update_review_status(req, reply) {
-    const { status } = req.body || {};
-    if (typeof req.params.review_id !== "string" || req.params.review_id.length !== 7) {
-        return reply.code(400).send({ error: "Invalid review ID" });
-    }
-    if (typeof status !== "string") return reply.code(400).send({ error: "Invalid review status" });
-    const review = review_model.get_review_by_id(req.params.review_id);
-    if (!review) return reply.code(404).send({ error: "Review Not Found" });
+    const { status } = req.body;
     const status_row = status_model.get_status_by_name(status);
-    if (!status_row) return reply.code(400).send({ error: "Invalid review status" });
 
     try {
         review_model.update_review_status(req.params.review_id, status_row.status_id);
@@ -76,9 +53,6 @@ function update_review_status(req, reply) {
 }
 
 function delete_review(req, reply) {
-    if (typeof req.params.review_id !== "string" || req.params.review_id.length !== 7) {
-        return reply.code(400).send({ error: "Invalid review ID" });
-    }
     try {
         const result = review_model.delete_review(req.params.review_id);
         if (result.changes === 0) return reply.code(404).send({ error: "Review Not Found" });

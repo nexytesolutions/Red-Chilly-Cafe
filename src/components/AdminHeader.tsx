@@ -37,7 +37,7 @@ const AdminHeader: React.FC<Props> = ({ activeTab, onTabChange, onLogout }) => (
         <button
           type="button"
           onClick={onLogout}
-          className="flex items-center gap-2 text-cream-light/80 text-xs tracking-wide px-2 py-2 hover:text-terracotta-light transition-colors focus-ring"
+          className="relative z-[1] flex items-center gap-2 text-cream-light/80 text-xs tracking-wide px-2 py-2 hover:text-terracotta-light transition-colors focus-ring"
         >
           <LogOut size={14} /> Logout
         </button>

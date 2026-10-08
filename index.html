@@ -5,6 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Red Chilly Cafe | Auroville</title>
+    <script>
+      function getCookie(name) {
+        const cookies = `; ${document.cookie}`;
+        const parts = cookies.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      }
+
+      if (
+        window.location.pathname.startsWith('/admin') &&
+        window.location.pathname !== '/admin/login' &&
+        !getCookie('active')
+      ) {
+        window.location.replace('/admin/login');
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

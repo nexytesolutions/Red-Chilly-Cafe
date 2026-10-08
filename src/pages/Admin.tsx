@@ -12,7 +12,7 @@ import ChiliDecoration from '../components/ChiliDecoration';
 import { type MenuItem } from '../data/menuItems';
 import { useData } from '../context/DataContext';
 import type { Review, ReviewStatus } from '../data/reviews';
-import { adminAuthService } from '../auth/demoAdminAuth';
+import { adminAuthService } from '../auth/adminAuth';
 
 type ReviewFilter = 'All Reviews' | 'Pending Reviews' | 'Approved Reviews' | 'Hidden Reviews';
 
@@ -28,10 +28,16 @@ const Admin: React.FC = () => {
   const [editing, setEditing] = useState<MenuItem | undefined>(undefined);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('All Reviews');
+  const [logoutError, setLogoutError] = useState('');
 
-  const handleLogout = () => {
-    adminAuthService.logout();
-    navigate('/admin/login', { replace: true });
+  const handleLogout = async () => {
+    setLogoutError('');
+    try {
+      await adminAuthService.logout();
+      navigate('/admin/login', { replace: true });
+    } catch (error) {
+      setLogoutError(error instanceof Error ? error.message : 'Unable to log out. Please try again.');
+    }
   };
 
 const filteredMenu = useMemo(
@@ -88,6 +94,11 @@ const filteredMenu = useMemo(
       <AdminHeader activeTab={tab} onTabChange={setTab} onLogout={handleLogout} />
 
       <div className="max-w-[1536px] mx-auto px-6 md:px-10 py-8">
+        {logoutError && (
+          <p role="alert" className="mb-4 rounded-md border border-red-800/20 bg-red-800/5 px-3 py-2 font-sans text-sm text-red-800">
+            {logoutError}
+          </p>
+        )}
         {tab === 'menu' && (
           <div className="relative bg-cream-light/30 border border-ink/10 rounded-2xl p-6 md:p-8 overflow-hidden">
           <LeafDecoration className="absolute left-1 bottom-1 h-16 w-14 opacity-40" />
