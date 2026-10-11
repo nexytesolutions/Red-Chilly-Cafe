@@ -78,6 +78,7 @@ fastify.setErrorHandler((error, request, reply) => {
 });
 fastify.register(require("@fastify/cors"), {
     origin: ["http://localhost:5173"], // Or restrict to specific origin
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 });
 

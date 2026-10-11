@@ -5,16 +5,17 @@ const menu_validation = require("../validations/menu_validation")
 
 async function menu_routes(fastify, options) {
     const create_menu_opts = {
-        // preValidation: [fastify.authenticate], // ✅ auth middleware
+        preValidation: [fastify.authenticate], // ✅ auth middleware
         preHandler: menu_validation.create_menu_validation,
         handler: menu_controller.create_menu
     };
     const update_menu_opts = {
-        // preValidation: [fastify.authenticate], // ✅ auth middleware
+        preValidation: [fastify.authenticate], // ✅ auth middleware
         preHandler: menu_validation.update_menu_validation,
         handler: menu_controller.update_menu
     };
     const delete_menu_opts = {
+                preValidation: [fastify.authenticate], // ✅ auth middleware
         handler: menu_controller.delete_menu
     };
     const get_all_menus_opts = {

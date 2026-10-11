@@ -16,6 +16,7 @@ interface ReviewRow {
 async function request(path: string, method: string, body?: unknown) {
   const response = await fetch(`${API_URL}/api/reviews${path}`, {
     method,
+    credentials: 'include',
     ...(body !== undefined && {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

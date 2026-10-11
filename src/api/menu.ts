@@ -18,6 +18,7 @@ interface MenuRow {
 async function sendMenuRequest(path: string, method: string, menu?: MenuItem) {
   const response = await fetch(`${API_URL}/api/menus${path}`, {
     method,
+    credentials: 'include',
     ...(menu && {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -44,7 +45,7 @@ async function sendMenuRequest(path: string, method: string, menu?: MenuItem) {
 }
 
 export async function fetchMenuItems(): Promise<MenuItem[]> {
-  const response = await fetch(`${API_URL}/api/menus`);
+  const response = await fetch(`${API_URL}/api/menus`, { credentials: 'include' });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch menu: ${response.status}`);
