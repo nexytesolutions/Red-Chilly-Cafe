@@ -4,6 +4,7 @@ import PublicLayout from './components/PublicLayout';
 import LandingPage from './pages/LandingPage';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
+import MenuItemDetail from './pages/MenuItemDetail';
 import { adminAuthService } from './auth/demoAdminAuth';
 import { DataProvider } from './context/DataContext';
 
@@ -13,6 +14,7 @@ const App: React.FC = () => (
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/menu/:itemId" element={<MenuItemDetail />} />
         </Route>
         <Route
           path="/admin"

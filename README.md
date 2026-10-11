@@ -28,10 +28,15 @@ npm run preview
 
 ## Data & persistence
 
-Menu items and reviews live in `src/data/menuItems.ts` and `src/data/reviews.ts`
-as the initial seed data. At runtime, all reads/writes go through
-`src/context/DataContext.tsx`, which persists to `localStorage` under the keys
-`rc_menu` and `rc_reviews`. This means:
+In the default frontend demo mode, menu items and reviews are read and written by
+`src/context/DataContext.tsx` using the `rc_menu` and `rc_reviews` localStorage
+keys. Existing saved menu items are preserved; the bundled review examples are
+used only when `rc_reviews` has not been saved yet. Menu categories and diet
+types are available locally so menu management works without a backend.
+
+To opt in to the API backend, set `VITE_API_URL` in `.env.local` (for example,
+`http://localhost:3000`) and restart Vite. When this variable is configured,
+API errors are reported instead of silently switching to local data. This means:
 
 - Adding, editing or deleting a menu item in `/admin` updates the public `/menu`
   page immediately.
@@ -40,9 +45,8 @@ as the initial seed data. At runtime, all reads/writes go through
 - Submitting the review form on `/contact` adds a new review with `Pending`
   status, visible in the admin panel for moderation.
 
-The `DataContext` is intentionally the single place that talks to storage, so it
-can be swapped for real API calls (Firebase, Supabase, or a custom backend)
-without touching any page or component.
+The `DataContext` is the shared source for menu and review state in both the
+public site and Admin Panel.
 
 ## Notes on assets
 

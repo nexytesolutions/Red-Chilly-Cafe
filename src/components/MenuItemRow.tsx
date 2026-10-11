@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Leaf, Flame } from 'lucide-react';
 import type { MenuItem } from '../data/menuItems';
 
@@ -7,7 +8,11 @@ interface Props {
 }
 
 const MenuItemRow: React.FC<Props> = ({ item }) => (
-  <div className="flex items-start gap-3 border-b border-ink/10 py-4 last:border-b-0 sm:gap-4">
+  <Link
+    to={`/menu/${encodeURIComponent(item.id)}`}
+    aria-label={`View details for ${item.name}`}
+    className="flex w-full items-start gap-3 border-b border-ink/10 py-4 text-ink no-underline last:border-b-0 sm:gap-4"
+  >
     <img
       src={item.image}
       alt={item.name}
@@ -44,7 +49,7 @@ const MenuItemRow: React.FC<Props> = ({ item }) => (
         <p className="font-sans font-semibold text-ink text-sm sm:text-base">₹{item.largePrice}</p>
       </div>
     </div>
-  </div>
+  </Link>
 );
 
 export default MenuItemRow;

@@ -4,7 +4,7 @@ import { RatingStarsInput } from './RatingStars';
 import { useData } from '../context/DataContext';
 
 const ReviewForm: React.FC = () => {
-  const { addReview, reviewError } = useData();
+  const { addReview, isDemoMode, reviewError } = useData();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [rating, setRating] = useState(0);
@@ -14,18 +14,25 @@ const ReviewForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !rating || !text) {
-      setError('Please fill in every field and choose a rating.');
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedText = text.trim();
+    if (!trimmedName || !trimmedText || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setError('Enter your name, a valid email address, and your review.');
+      return;
+    }
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+      setError('Please choose a rating from 1 to 5.');
       return;
     }
     setError('');
     const saved = await addReview({
       id: `${Date.now()}`,
-      name,
-      email,
+      name: trimmedName,
+      email: trimmedEmail,
       avatar: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=200&auto=format&fit=crop',
       rating,
-      text,
+      text: trimmedText,
       status: 'Pending',
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
     });
@@ -89,7 +96,9 @@ const ReviewForm: React.FC = () => {
       {(error || reviewError) && <p role="alert" className="text-terracotta-dark text-sm font-sans">{error || reviewError}</p>}
       {submitted && (
         <p className="text-green-700 text-sm font-sans">
-          Thank you! Your review has been submitted and is awaiting approval.
+          {isDemoMode
+            ? 'Thank you! Your review has been saved locally for this demo and is awaiting approval.'
+            : 'Thank you! Your review has been submitted and is awaiting approval.'}
         </p>
       )}
 

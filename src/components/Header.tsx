@@ -13,13 +13,14 @@ const navItems = [
 ];
 
 const Header: React.FC = () => {
-  const { hash } = useLocation();
+  const { hash, pathname } = useLocation();
   const [open, setOpen] = useState(false);
+  const sectionHref = (section: string) => (pathname === '/' ? section : `/${section}`);
 
   return (
     <header className="relative z-30 bg-espresso border-b border-white/5" style={{ position: 'sticky', top: 0 }}>
       <div className="mx-auto flex max-w-[1536px] items-center justify-between px-6 py-3 md:px-10">
-        <a href="#home" className="shrink-0" onClick={() => setOpen(false)}>
+        <a href={sectionHref('#home')} className="shrink-0" onClick={() => setOpen(false)}>
           <Logo className="h-16 w-16 md:h-20 md:w-20" />
         </a>
 
@@ -29,7 +30,7 @@ const Header: React.FC = () => {
             return (
               <a
                 key={item.hash}
-                href={item.hash}
+                href={sectionHref(item.hash)}
                 className={`font-sans text-sm tracking-[0.12em] transition-colors focus-ring ${
                   active ? 'text-terracotta' : 'text-cream-light/90 hover:text-terracotta-light'
                 }`}
@@ -64,7 +65,7 @@ const Header: React.FC = () => {
             return (
               <a
                 key={item.hash}
-                href={item.hash}
+                href={sectionHref(item.hash)}
                 onClick={() => setOpen(false)}
                 className={`font-sans text-sm tracking-[0.12em] py-1 focus-ring ${
                   active ? 'text-terracotta' : 'text-cream-light/90'
