@@ -273,7 +273,12 @@ const filteredMenu = useMemo(
 
       {modalOpen && (
         <Modal title={editing ? 'Edit Item' : 'Add New Item'} onClose={() => setModalOpen(false)}>
-          <MenuItemForm initial={editing} onSave={handleSave} onCancel={() => setModalOpen(false)} />
+          <MenuItemForm
+            key={editing?.id ?? 'new'}
+            initial={editing}
+            onSave={handleSave}
+            onCancel={() => setModalOpen(false)}
+          />
         </Modal>
       )}
       {reviewModalOpen && (

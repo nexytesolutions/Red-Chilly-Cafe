@@ -1,6 +1,7 @@
 const menu_model = require("../models/menu_model");
 const category_model = require("../models/category_model");
 const diet_type_model = require("../models/diet_type_model");
+const { convert_google_drive_image_url } = require("../utils/google_drive_image");
 
 async function create_menu_validation(req, reply) {
     const menu = req.body?.menu;
@@ -39,6 +40,9 @@ function validate_menu(reply, menu) {
     }
     if (typeof menu.description !== "string" || !menu.description.trim() || menu.description.trim().length > 200) {
         return reply.code(400).send({ error: "Description must contain 1 to 200 characters" });
+    }
+    if (typeof menu.image_url === "string") {
+        menu.image_url = convert_google_drive_image_url(menu.image_url.trim());
     }
     if (typeof menu.image_url !== "string" || menu.image_url.trim().length < 5 || menu.image_url.trim().length > 150) {
         return reply.code(400).send({ error: "Image URL must contain 5 to 150 characters" });

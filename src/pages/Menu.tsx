@@ -77,7 +77,10 @@ const Menu: React.FC = () => {
             More {selectedCategory?.name.toLowerCase() ?? 'menu'} dishes are coming soon to the menu.
           </p>
         ) : (
-          <div className="max-h-[30rem] overflow-y-auto pr-1 md:max-h-none md:overflow-visible md:pr-0">
+          <div
+            data-menu-scroll-container
+            className="max-h-[30rem] overflow-y-auto pr-1 md:max-h-none md:overflow-visible md:pr-0"
+          >
             <div className="grid grid-cols-1 gap-x-12 md:grid-cols-2">
               <div>
                 {left.map((item) => (

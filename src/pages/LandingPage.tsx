@@ -7,19 +7,19 @@ import OurStory from './OurStory';
 
 const LandingPage: React.FC = () => (
   <>
-    <div id="home">
+    <div id="home" className="scroll-mt-[89px] md:scroll-mt-[105px]">
       <Home />
     </div>
-    <div id="our-story">
+    <div id="our-story" className="scroll-mt-[89px] md:scroll-mt-[105px]">
       <OurStory />
     </div>
-    <div id="menu">
+    <div id="menu" className="scroll-mt-[89px] md:scroll-mt-[105px]">
       <Menu />
     </div>
-    <div id="experience">
+    <div id="experience" className="scroll-mt-[89px] md:scroll-mt-[105px]">
       <Experience />
     </div>
-    <div id="contact">
+    <div id="contact" className="scroll-mt-[89px] md:scroll-mt-[105px]">
       <Contact />
     </div>
   </>

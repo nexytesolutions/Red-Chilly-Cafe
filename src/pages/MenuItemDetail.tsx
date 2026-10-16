@@ -41,7 +41,7 @@ const MenuItemDetail: React.FC = () => {
   const isVegetarian = item.dietType.name.toLowerCase() === 'veg';
 
   return (
-    <section className="bg-cream px-6 py-12 md:px-16 md:py-20">
+    <section className="bg-cream px-6 py-12 md:px-16">
       <div className="mx-auto max-w-[1280px]">
         <Link
           to="/#menu"
@@ -50,10 +50,11 @@ const MenuItemDetail: React.FC = () => {
           <ArrowLeft size={15} /> Back to Menu
         </Link>
 
-        <div className="mt-8 grid grid-cols-1 items-center gap-8 md:mt-10 md:grid-cols-2 md:gap-12 lg:gap-16">
+        <div className="mt-8 grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
           <div className="overflow-hidden rounded-2xl bg-cream-light shadow-sm">
             {item.image && !imageFailed ? (
               <img
+                key={item.image}
                 src={item.image}
                 alt={item.name}
                 onError={() => setFailedImage(item.image)}

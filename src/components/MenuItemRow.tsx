@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Leaf, Flame } from 'lucide-react';
 import type { MenuItem } from '../data/menuItems';
+import { saveMenuScrollPosition } from '../utils/menuScrollPosition';
 
 interface Props {
   item: MenuItem;
@@ -10,10 +11,15 @@ interface Props {
 const MenuItemRow: React.FC<Props> = ({ item }) => (
   <Link
     to={`/menu/${encodeURIComponent(item.id)}`}
+    onClick={() => {
+      const list = document.querySelector<HTMLElement>('[data-menu-scroll-container]');
+      saveMenuScrollPosition(list?.scrollTop ?? 0);
+    }}
     aria-label={`View details for ${item.name}`}
     className="flex w-full items-start gap-3 border-b border-ink/10 py-4 text-ink no-underline last:border-b-0 sm:gap-4"
   >
     <img
+      key={item.image}
       src={item.image}
       alt={item.name}
       loading="lazy"

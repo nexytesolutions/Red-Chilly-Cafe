@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { menuItemNeedsMigration, normalizeMenuItem, type MenuItem } from '../data/menuItems';
+import { convertGoogleDriveImageUrl } from '../utils/googleDriveImage';
 import { type Review, type ReviewStatus, reviews } from '../data/reviews';
 import { fetchDietTypes } from '../api/dietTypes';
 import { demoDietTypes, type DietType } from '../data/dietTypes';
@@ -205,6 +206,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       : { value: [] as Review[], error: null },
   );
   const [menu, setMenu] = useState<MenuItem[]>(initialMenu.value);
+  const menuChangedDuringInitialLoad = useRef(false);
   const [menuError, setMenuError] = useState<string | null>(initialMenu.error);
   const [reviewList, setReviewList] = useState<Review[]>(initialReviews.value);
   const [reviewError, setReviewError] = useState<string | null>(initialReviews.error);
@@ -224,7 +226,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let active = true;
     fetchMenuItems()
       .then((items) => {
-        if (active) setMenu(items);
+        if (active && !menuChangedDuringInitialLoad.current) setMenu(items);
       })
       .catch((error: unknown) => {
         if (active) setMenuError(getBackendError('load menu data', error));
@@ -268,9 +270,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         const next = [...menu, item];
         window.localStorage.setItem(MENU_STORAGE_KEY, JSON.stringify(next));
+        menuChangedDuringInitialLoad.current = true;
         setMenu(next);
       } else {
         const id = await createMenuItemRequest(item);
+        menuChangedDuringInitialLoad.current = true;
         setMenu((previous) => [...previous, { ...item, id }]);
       }
       setMenuError(null);
@@ -283,17 +287,25 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateMenuItem = async (item: MenuItem) => {
     try {
+      const updatedItem = {
+        ...item,
+        image: convertGoogleDriveImageUrl(item.image.trim()),
+      };
       if (isDemoMode) {
         if (!initialMenu.canWrite) throw new Error(initialMenu.error ?? 'Menu edits are disabled until the saved data can be safely recovered.');
         if (!menu.some((current) => current.id === item.id)) {
           throw new Error(`Menu item "${item.id}" was not found in saved demo data.`);
         }
-        const next = menu.map((current) => (current.id === item.id ? item : current));
+        const next = menu.map((current) => (current.id === item.id ? updatedItem : current));
         window.localStorage.setItem(MENU_STORAGE_KEY, JSON.stringify(next));
+        menuChangedDuringInitialLoad.current = true;
         setMenu(next);
       } else {
-        await updateMenuItemRequest(item);
-        setMenu((previous) => previous.map((current) => (current.id === item.id ? item : current)));
+        await updateMenuItemRequest(updatedItem);
+        menuChangedDuringInitialLoad.current = true;
+        setMenu((previous) =>
+          previous.map((current) => (current.id === updatedItem.id ? updatedItem : current)),
+        );
       }
       setMenuError(null);
       return true;
@@ -309,9 +321,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!initialMenu.canWrite) throw new Error(initialMenu.error ?? 'Menu edits are disabled until the saved data can be safely recovered.');
         const next = menu.filter((item) => item.id !== id);
         window.localStorage.setItem(MENU_STORAGE_KEY, JSON.stringify(next));
+        menuChangedDuringInitialLoad.current = true;
         setMenu(next);
       } else {
         await deleteMenuItemRequest(id);
+        menuChangedDuringInitialLoad.current = true;
         setMenu((previous) => previous.filter((item) => item.id !== id));
       }
       setMenuError(null);

@@ -40,6 +40,8 @@ API errors are reported instead of silently switching to local data. This means:
 
 - Adding, editing or deleting a menu item in `/admin` updates the public `/menu`
   page immediately.
+- Google Drive file links pasted as menu item image URLs are converted to direct
+  image URLs before they are saved.
 - Approving, hiding or deleting a review in `/admin` updates the `/experience`
   page's visible review list (only `Approved` reviews are shown publicly).
 - Submitting the review form on `/contact` adds a new review with `Pending`

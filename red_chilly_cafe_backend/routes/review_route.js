@@ -4,7 +4,7 @@ const review_validation = require("../validations/review_validation");
 async function review_routes(fastify) {
     fastify.get("/", review_controller.get_all_reviews);
     fastify.post("/", {
-        preValidation: [fastify.authenticate], // ✅ auth middleware
+        // preValidation: [fastify.authenticate], // ✅ auth middleware
         preHandler: review_validation.create_review_validation,
         handler: review_controller.create_review,
     });

@@ -12,6 +12,7 @@ const AdminMenuItemRow: React.FC<Props> = ({ item, onEdit, onDelete }) => (
   <div className="flex flex-col gap-2 border-b border-ink/10 py-4 last:border-b-0 sm:flex-row sm:items-start sm:gap-4">
     <div className="flex items-start gap-3">
       <img
+        key={item.image}
         src={item.image}
         alt={item.name}
         className="h-16 w-16 shrink-0 rounded-lg object-cover sm:h-16 sm:w-16"

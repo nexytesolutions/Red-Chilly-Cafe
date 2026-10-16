@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { type MenuItem } from '../data/menuItems';
 import { useData } from '../context/DataContext';
+import { convertGoogleDriveImageUrl } from '../utils/googleDriveImage';
 
 interface Props {
   initial?: MenuItem;
@@ -46,7 +47,7 @@ const MenuItemForm: React.FC<Props> = ({ initial, onSave, onCancel }) => {
       ...form,
       name: form.name.trim(),
       description: form.description.trim(),
-      image: form.image.trim(),
+      image: convertGoogleDriveImageUrl(form.image.trim()),
     });
   };
 
@@ -143,7 +144,9 @@ const MenuItemForm: React.FC<Props> = ({ initial, onSave, onCancel }) => {
           className={inputClass}
           placeholder="https://..."
           value={form.image}
-          onChange={(e) => setForm({ ...form, image: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, image: convertGoogleDriveImageUrl(e.target.value) })
+          }
         />
       </div>
 

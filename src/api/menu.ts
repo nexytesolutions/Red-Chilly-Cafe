@@ -1,4 +1,5 @@
 import type { MenuItem } from '../data/menuItems';
+import { convertGoogleDriveImageUrl } from '../utils/googleDriveImage';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -28,7 +29,7 @@ async function sendMenuRequest(path: string, method: string, menu?: MenuItem) {
           category_id: menu.category.id,
           diet_type_id: menu.dietType.id,
           description: menu.description,
-          image_url: menu.image,
+          image_url: convertGoogleDriveImageUrl(menu.image),
           regular_price: menu.regularPrice,
           large_price: menu.largePrice,
         },
