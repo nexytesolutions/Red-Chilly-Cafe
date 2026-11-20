@@ -1,36 +1,36 @@
 import React from 'react';
-import { MapPin, Phone, Clock, Send } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Clock, MapPin, Phone, Send } from 'lucide-react';
 import SectionHeading from '../components/SectionHeading';
-import Button from '../components/Button';
 import MapVisual from '../components/MapVisual';
-import ReviewForm from '../components/ReviewForm';
 import LeafDecoration from '../components/LeafDecoration';
 
 const Contact: React.FC = () => (
-  <section className="relative bg-cream px-6 md:px-16 py-16 overflow-hidden">
-    <LeafDecoration className="absolute left-2 bottom-2 h-28 w-24 opacity-70" />
+  <section className="relative overflow-hidden bg-cream px-6 py-12 md:px-12 md:py-14">
+    <LeafDecoration className="absolute -left-2 bottom-2 h-28 w-24 opacity-55" />
+    <LeafDecoration className="absolute -right-2 bottom-2 h-28 w-24 -scale-x-100 opacity-55" />
 
-    <div className="relative mx-auto max-w-[1536px] grid grid-cols-1 lg:grid-cols-[1fr_1fr_1fr] gap-12">
-      <div>
+    <div className="relative mx-auto max-w-[1000px] rounded-xl border border-ink/10 bg-cream-light/35 p-5 shadow-sm sm:p-7 lg:grid lg:grid-cols-[0.9fr_1.1fr] lg:gap-7 lg:p-8">
+      <div className="flex flex-col">
         <SectionHeading eyebrow="FIND US" />
-        <h1 className="font-serif-display font-bold text-4xl text-ink mt-4 leading-[1.1]">
+        <h1 className="mt-3 font-serif-display text-3xl font-bold leading-[1.08] text-ink md:text-4xl">
           Red Chilly Cafe
           <br />
           Auroville
         </h1>
-        <p className="font-sans text-ink/60 text-sm mt-4 max-w-sm leading-relaxed">
+        <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-ink/65">
           A cosy cafe in the heart of Auroville, serving authentic Italian, Continental &amp; Fusion
           cuisine with love.
         </p>
 
-        <div className="mt-8 space-y-6">
+        <div className="mt-5 space-y-4">
           <div className="flex gap-3">
-            <span className="h-9 w-9 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center shrink-0">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-terracotta/10 text-terracotta">
               <MapPin size={16} />
             </span>
             <div>
-              <p className="font-sans font-semibold text-ink text-sm">Address</p>
-              <p className="font-sans text-sm text-ink/60 leading-relaxed">
+              <p className="font-sans text-sm font-semibold text-ink">Address</p>
+              <p className="font-sans text-sm leading-relaxed text-ink/65">
                 Auroville Rd, near Auro Park,
                 <br />
                 Bommayapalayam,
@@ -41,50 +41,48 @@ const Contact: React.FC = () => (
           </div>
 
           <div className="flex gap-3">
-            <span className="h-9 w-9 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center shrink-0">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-terracotta/10 text-terracotta">
               <Phone size={16} />
             </span>
             <div>
-              <p className="font-sans font-semibold text-ink text-sm">Phone</p>
-              <p className="font-sans text-sm text-ink/60">+91 413 290 4778</p>
+              <p className="font-sans text-sm font-semibold text-ink">Phone</p>
+              <p className="font-sans text-sm text-ink/65">+91 413 290 4778</p>
             </div>
           </div>
 
           <div className="flex gap-3">
-            <span className="h-9 w-9 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center shrink-0">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-terracotta/10 text-terracotta">
               <Clock size={16} />
             </span>
             <div>
-              <p className="font-sans font-semibold text-ink text-sm">Opening Hours</p>
-              <p className="font-sans text-sm text-ink/60">9:00 AM – 10:00 PM</p>
+              <p className="font-sans text-sm font-semibold text-ink">Opening Hours</p>
+              <p className="font-sans text-sm text-ink/65">9:00 AM – 10:00 PM</p>
             </div>
           </div>
         </div>
 
-        <a
-          href="https://www.google.com/maps/search/?api=1&query=Red+Chilly+Cafe+Auroville+Tamil+Nadu"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block mt-8"
-        >
-          <Button variant="solid" icon={<Send size={15} />}>
-            GET DIRECTIONS
-          </Button>
-        </a>
+        <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:mt-auto lg:pt-5">
+          <a
+            href="https://www.google.com/maps/dir/?api=1&destination=Red+Chilly+Cafe%2C+Auroville%2C+Tamil+Nadu+605101"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-terracotta px-4 py-3 font-sans text-xs font-semibold text-cream-light transition-colors hover:bg-terracotta-dark focus-ring sm:text-sm"
+          >
+            <Send size={15} />
+            Get Directions
+          </a>
+          <Link
+            to="/feedback"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-terracotta px-3 py-3 font-sans text-xs font-semibold text-terracotta transition-colors hover:bg-terracotta/10 focus-ring sm:text-sm"
+          >
+            Share Your Experience
+            <ArrowRight size={16} />
+          </Link>
+        </div>
       </div>
 
-      <MapVisual />
-
-      <div className="lg:border-l lg:border-ink/10 lg:pl-12">
-        <SectionHeading eyebrow="SHARE YOUR EXPERIENCE" />
-        <h2 className="font-serif-display font-bold text-3xl text-ink mt-4 mb-2">
-          Leave Us a Review
-        </h2>
-        <p className="font-sans text-sm text-ink/60 mb-6 leading-relaxed">
-          Your feedback means a lot to us! Share your experience, help us grow and let others know
-          what you loved.
-        </p>
-        <ReviewForm />
+      <div className="mt-6 lg:mt-0">
+        <MapVisual />
       </div>
     </div>
   </section>

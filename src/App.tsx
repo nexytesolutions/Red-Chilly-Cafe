@@ -2,6 +2,8 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import PublicLayout from './components/PublicLayout';
 import LandingPage from './pages/LandingPage';
+import CustomerReviews from './pages/CustomerReviews';
+import FeedbackForm from './pages/FeedbackForm';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 import MenuItemDetail from './pages/MenuItemDetail';
@@ -54,6 +56,8 @@ const App: React.FC = () => (
       <Route element={<DataProvider><PublicLayout /></DataProvider>}>
         <Route path="/" element={<LandingPage />} />
         <Route path="/menu/:itemId" element={<MenuItemDetail />} />
+        <Route path="/customer-reviews" element={<CustomerReviews />} />
+        <Route path="/feedback" element={<FeedbackForm />} />
       </Route>
       <Route path="/admin" element={<AdminRoute />} />
       <Route path="/admin/login" element={<AdminLogin />} />

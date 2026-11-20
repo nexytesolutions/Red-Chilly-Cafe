@@ -9,9 +9,9 @@ const OurStory: React.FC = () => (
     <div className="relative mx-auto max-w-[1536px] grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
       <div className="rounded-2xl overflow-hidden shadow-sm">
         <img
-          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop"
-          alt="Red Chilly Cafe outdoor seating area, lit with warm lanterns"
-          className="w-full h-[420px] md:h-[560px] object-cover"
+          src="/assets/red-chilly-cafe-our-story.jpg"
+          alt="Red Chilly Cafe restaurant"
+          className="w-full h-[420px] md:h-[560px] object-cover object-center"
         />
       </div>
 

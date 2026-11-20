@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import React from 'react';
+import { ArrowRight, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import SectionHeading from '../components/SectionHeading';
 import GalleryGrid from '../components/GalleryGrid';
 import ReviewCard from '../components/ReviewCard';
@@ -8,90 +9,62 @@ import ChiliDecoration from '../components/ChiliDecoration';
 import WaveDivider from '../components/WaveDivider';
 import { useData } from '../context/DataContext';
 
-const PAGE_SIZE = 3;
-
 const Experience: React.FC = () => {
   const { reviewList } = useData();
   const visible = reviewList.filter((r) => r.status === 'Approved');
-  const [page, setPage] = useState(0);
-  const maxPage = Math.max(0, Math.ceil(visible.length / PAGE_SIZE) - 1);
-  const shown = visible.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
-
-  const average =
-    visible.length > 0
-      ? (visible.reduce((sum, r) => sum + r.rating, 0) / visible.length).toFixed(1)
-      : '4.2';
 
   return (
-    <section className="relative bg-cream px-6 md:px-16 pt-14 pb-4 overflow-hidden">
-      <LeafDecoration className="absolute left-2 bottom-24 h-28 w-24 opacity-70" />
-      <ChiliDecoration className="absolute right-2 top-20 h-14 w-28 opacity-70" />
+    <section className="relative overflow-hidden bg-cream px-6 py-12 md:px-12 md:py-14">
+      <LeafDecoration className="absolute -left-2 top-8 h-28 w-24 opacity-55" />
+      <LeafDecoration className="absolute -left-2 bottom-8 h-28 w-24 opacity-55" />
+      <ChiliDecoration className="absolute right-2 top-8 h-14 w-28 opacity-70" />
 
-      <div className="relative mx-auto max-w-[1536px] grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-14">
+      <div className="relative mx-auto grid max-w-[1120px] grid-cols-1 gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-9">
         <div>
           <SectionHeading eyebrow="OUR GALLERY" />
-          <h2 className="font-serif-display font-bold text-4xl text-ink mt-3 leading-[1.1]">
+          <h2 className="mt-3 font-serif-display text-3xl font-bold leading-[1.05] text-ink md:text-4xl">
             A Slice of Red Chilly
             <br />
             Life
           </h2>
-          <p className="font-sans text-ink/60 text-sm mt-4 max-w-md leading-relaxed">
+          <p className="mt-3 max-w-md font-sans text-sm leading-relaxed text-ink/60">
             Good food, cozy vibes, and beautiful moments — captured at Red Chilly Cafe.
           </p>
 
-          <div className="mt-8">
+          <div className="mt-6">
             <GalleryGrid />
           </div>
         </div>
 
-        <div className="lg:border-l lg:border-ink/10 lg:pl-14">
+        <div className="lg:border-l lg:border-terracotta/10 lg:pl-9">
           <SectionHeading eyebrow="REAL REVIEWS" />
+          <h2 className="mt-3 font-serif-display text-3xl font-bold leading-tight text-ink md:text-4xl">
+            Leave Us a Review
+          </h2>
 
-          <div className="flex items-center gap-3 mt-4">
-            <div className="h-14 w-14 rounded-full border border-terracotta/60 flex items-center justify-center text-terracotta">
-              <Star size={22} />
-            </div>
-            <div>
-              <p className="font-serif-display font-bold text-3xl text-ink">
-                {average} <span className="text-lg font-sans font-normal text-ink/50">/ 5</span>
-              </p>
-              <p className="font-sans text-xs text-ink/50">590+ Google Reviews</p>
-            </div>
-          </div>
-
-          <div className="mt-6 space-y-4">
-            {shown.map((review) => (
+          <div className="mt-5 space-y-3">
+            {visible.slice(0, 3).map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}
+            {visible.length === 0 && (
+              <p className="rounded-xl border border-terracotta/10 bg-cream-light/35 p-5 font-sans text-sm text-ink/65">
+                No published reviews yet. Be the first to share your experience.
+              </p>
+            )}
           </div>
 
-          {maxPage > 0 && (
-            <div className="flex items-center justify-center gap-4 mt-6">
-              <button
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                disabled={page === 0}
-                className="text-terracotta disabled:opacity-30 focus-ring"
-                aria-label="Previous reviews"
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <span className="font-sans text-xs tracking-[0.2em] text-terracotta">
-                MORE REVIEWS
-              </span>
-              <button
-                onClick={() => setPage((p) => Math.min(maxPage, p + 1))}
-                disabled={page === maxPage}
-                className="text-terracotta disabled:opacity-30 focus-ring"
-                aria-label="More reviews"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          )}
+          <Link
+            to="/customer-reviews"
+            className="mx-auto mt-5 flex w-fit items-center justify-center gap-3 rounded-lg bg-terracotta px-7 py-3 font-sans text-sm font-semibold text-cream-light transition-colors hover:bg-terracotta-dark focus-ring"
+          >
+            <Star size={17} />
+            View All Reviews
+            <ArrowRight size={18} />
+          </Link>
         </div>
       </div>
 
-      <WaveDivider className="w-full h-16 mt-12 -mb-4" />
+      <WaveDivider className="mt-10 -mb-4 h-12 w-full" />
     </section>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Menu as MenuIcon, X } from 'lucide-react';
-import Logo from './Logo';
 import ChiliDecoration from './ChiliDecoration';
 
 const navItems = [
@@ -21,12 +20,20 @@ const Header: React.FC = () => {
     <header className="relative z-30 bg-espresso border-b border-white/5" style={{ position: 'sticky', top: 0 }}>
       <div className="mx-auto flex max-w-[1536px] items-center justify-between px-6 py-3 md:px-10">
         <a href={sectionHref('#home')} className="shrink-0" onClick={() => setOpen(false)}>
-          <Logo className="h-16 w-16 md:h-20 md:w-20" />
+          <img
+            src="/assets/red-chilly-official-logo.png"
+            alt="Red Chilly Cafe official logo"
+            className="h-16 w-24 object-contain md:h-20 md:w-32"
+          />
         </a>
 
         <nav className="hidden md:flex items-center gap-10 lg:gap-14">
           {navItems.map((item) => {
-            const active = hash === item.hash || (!hash && item.hash === '#home');
+            const active =
+              hash === item.hash ||
+              (!hash && item.hash === '#home') ||
+              (item.hash === '#experience' &&
+                (pathname === '/customer-reviews' || pathname === '/feedback'));
             return (
               <a
                 key={item.hash}
@@ -61,7 +68,11 @@ const Header: React.FC = () => {
       {open && (
         <nav className="md:hidden bg-espresso-dark border-t border-white/10 px-6 py-4 flex flex-col gap-4">
           {navItems.map((item) => {
-            const active = hash === item.hash || (!hash && item.hash === '#home');
+            const active =
+              hash === item.hash ||
+              (!hash && item.hash === '#home') ||
+              (item.hash === '#experience' &&
+                (pathname === '/customer-reviews' || pathname === '/feedback'));
             return (
               <a
                 key={item.hash}
